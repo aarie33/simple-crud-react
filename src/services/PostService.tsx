@@ -104,4 +104,26 @@ export const postService = {
       };
     }
   },
+
+  async delete<T>(id: number): Promise<ApiResponse<T>> {
+    const token = authService.currentUser()?.token;
+
+    try {
+      const response = await axios.delete(`${API_URL}/posts/${id}`, {
+        headers: {
+          Authorization: `${token}`
+        }
+      });
+
+      return {
+        data: response.data.data,
+        error: null
+      };
+    } catch (error: any) {
+      return {
+        data: null,
+        error: error.response?.data.errors
+      };
+    }
+  },
 }

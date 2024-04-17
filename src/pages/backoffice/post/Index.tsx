@@ -5,6 +5,7 @@ import { RiAddLine, RiDeleteBinLine, RiEyeLine, RiPencilLine } from '@remixicon/
 import { Link } from 'react-router-dom';
 import { postService } from '../../../services/PostService';
 import moment from 'moment';
+import ModalConfirm from '../../../components/ModalConfirm';
 
 interface Post {
   id: number;
@@ -20,29 +21,54 @@ const PostIndex: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<Number | null>(null);
+
+  const fetchPosts = async () => {
+    setLoading(true);
+
+    const response = await postService.getAll<Post>(
+      page,
+      limit,
+      search,
+    );
+    if (Array.isArray(response.data)) {
+      setPosts(response.data);
+    }
+
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-
-      const response = await postService.getAll<Post>(
-        page,
-        limit,
-        search,
-      );
-      if (Array.isArray(response.data)) {
-        setPosts(response.data);
-      }
-
-      setLoading(false);
-    };
-
     fetchPosts();
   }, [
     page,
     limit,
     search
   ]);
+
+  const handleOpenModal = (id: Number) => {
+    setIsModalOpen(true);
+    setSelectedId(id)
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedId(null)
+  };
+
+  const handleConfirmModal = async () => {
+    setIsModalOpen(false)
+
+    const response = await postService.delete(Number(selectedId));
+
+    if (response.data) {
+      fetchPosts();
+    } else {
+      alert(response.error);
+    }
+    setSelectedId(null)
+  }
 
   return (
     <BackofficeLayout title="Post">
@@ -92,9 +118,9 @@ const PostIndex: React.FC = () => {
                       <Link to={`/backoffice/posts/${post.id}`} title="Detail Post">
                         <RiEyeLine className="text-blue-500 hover:text-blue-700" size="15px" />
                       </Link>
-                      <a href="#" title="Delete Post">
+                      <div title="Delete Post" onClick={() => handleOpenModal(post.id)} className="cursor-pointer">
                         <RiDeleteBinLine className="text-red-500 hover:text-red-700" size="15px" />
-                      </a>
+                      </div>
                     </div>
                   </Table.Cell>
                 </Table.Row>
@@ -117,6 +143,11 @@ const PostIndex: React.FC = () => {
           </Table>
         </div>
       </div>
+
+      <ModalConfirm title="Are you sure want to delete this post?"
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmModal} />
     </BackofficeLayout>
   );
 };
