@@ -11,12 +11,14 @@ import PostIndex from './pages/backoffice/post/Index';
 import PostCreate from './pages/backoffice/post/Create';
 import PostDetail from './pages/backoffice/post/Detail';
 import PostEdit from './pages/backoffice/post/Edit';
+import PostDetailLanding from './pages/landing/PostDetail';
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" Component={Index} />
+        <Route path="/:id" element={<PostDetailLanding />} />
 
         <Route path="/backoffice/registration" Component={Registration} />
         <Route path="/backoffice" Component={Login} />

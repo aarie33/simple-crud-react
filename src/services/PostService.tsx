@@ -14,6 +14,12 @@ export interface Post {
   updated_at: string;
 }
 
+export interface Paging {
+  current_page: number;
+  total_page: number;
+  total_items: number;
+}
+
 export const postService = {
   async create<T>(title: string, content: string, published: boolean): Promise<ApiResponse<T>> {
     const token = authService.currentUser()?.token;
@@ -48,7 +54,7 @@ export const postService = {
       });
 
       return {
-        data: response.data.data,
+        data: response.data,
         error: null
       };
     } catch (error: any) {

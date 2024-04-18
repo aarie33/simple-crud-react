@@ -3,22 +3,22 @@ import BackofficeLayout from '../../../layouts/BackofficeLayout';
 import { Badge, Spinner, Table } from 'flowbite-react';
 import { RiAddLine, RiDeleteBinLine, RiEyeLine, RiPencilLine } from '@remixicon/react';
 import { Link } from 'react-router-dom';
-import { postService } from '../../../services/PostService';
+import { Paging, Post, postService } from '../../../services/PostService';
 import moment from 'moment';
 import ModalConfirm from '../../../components/ModalConfirm';
+import Pagination from '../../../components/Pagination';
 
-interface Post {
-  id: number;
-  title: string;
-  published: boolean;
-  created_at: string;
-  updated_at: string;
+interface PostResponse {
+  data: Post,
+  paging: Paging
 }
 
 const PostIndex: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,13 +27,17 @@ const PostIndex: React.FC = () => {
   const fetchPosts = async () => {
     setLoading(true);
 
-    const response = await postService.getAll<Post>(
+    const response = await postService.getAll<PostResponse>(
       page,
       limit,
       search,
     );
-    if (Array.isArray(response.data)) {
-      setPosts(response.data);
+
+    if (response.data && response.data.paging && Array.isArray(response.data.data)) {
+      setPosts(response.data.data);
+
+      setCurrentPage(response.data.paging.current_page)
+      setTotalPage(response.data.paging.total_page)
     }
 
     setLoading(false);
@@ -46,6 +50,14 @@ const PostIndex: React.FC = () => {
     limit,
     search
   ]);
+
+  useEffect(() => {
+    setPage(1)
+  }, [search])
+
+  const rowNumber = (index: number) => {
+    return (currentPage - 1) * limit + index + 1
+  }
 
   const handleOpenModal = (id: Number) => {
     setIsModalOpen(true);
@@ -97,10 +109,10 @@ const PostIndex: React.FC = () => {
                 <span className="sr-only">Edit</span>
               </Table.HeadCell>
             </Table.Head>
-            <Table.Body className="divide-y">
+            <Table.Body className="divide-y border-b">
               {posts.map((post, index) => (
                 <Table.Row key={post.id} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell>{index + 1}</Table.Cell>
+                  <Table.Cell>{rowNumber(index)}</Table.Cell>
                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                     {post.title}
                   </Table.Cell>
@@ -141,6 +153,10 @@ const PostIndex: React.FC = () => {
               )}
             </Table.Body>
           </Table>
+        </div>
+
+        <div className="mt-4">
+          <Pagination totalPages={totalPage} page={page} limit={limit} onChange={(page) => setPage(page)} />
         </div>
       </div>
 
