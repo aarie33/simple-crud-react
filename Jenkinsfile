@@ -1,6 +1,11 @@
 pipeline {
-    agent any
+    // agent any
     // tools {nodejs "NODEJS"}
+    agent {
+        docker {
+            image 'node:lts-alpine3.20'
+        }
+    }
     stages {
         stage('Build') {
             steps {
