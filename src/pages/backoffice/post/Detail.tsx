@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import BackofficeLayout from "../../../layouts/BackofficeLayout";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Spinner } from "flowbite-react";
 import { Post, postService } from "../../../services/PostService";
 
 const PostDetail: React.FC = () => {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {

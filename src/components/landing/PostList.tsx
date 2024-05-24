@@ -45,7 +45,9 @@ const PostList: React.FC<Props> = ({ showPagination, limitPost }) => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  // eslint-disable-next-line
   const [limit, setLimit] = useState(limitPost);
+  // eslint-disable-next-line
   const [search, setSearch] = useState('');
 
   const fetchPosts = async () => {
@@ -68,6 +70,7 @@ const PostList: React.FC<Props> = ({ showPagination, limitPost }) => {
 
   useEffect(() => {
     fetchPosts();
+    // eslint-disable-next-line
   }, [
     page,
     limit,

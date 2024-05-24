@@ -21,9 +21,9 @@ const PostEdit: React.FC = () => {
       if (response.data) {
         const postData = response.data as Post; // Add type assertion here
         setPost(postData);
-        setTitle(postData.title || '');
-        setContent(postData.content || '');
-        setPublished(postData.published || false);
+        setTitle(post?.title || '');
+        setContent(post?.content || '');
+        setPublished(post?.published || false);
       }
       setLoading(false);
     };
@@ -85,7 +85,7 @@ const PostEdit: React.FC = () => {
                 onChange={(e) => setPublished(e.target.checked)}
               />
               <label htmlFor="publish-input">
-                {published && "Yes" || "No"}
+                {published ? "Yes" : "No"}
               </label>
             </div>
           </div>

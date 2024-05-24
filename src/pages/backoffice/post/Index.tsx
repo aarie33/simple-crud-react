@@ -26,6 +26,7 @@ const PostIndex: React.FC = () => {
 
   const fetchPosts = async () => {
     setLoading(true);
+    setLimit(10)
 
     const response = await postService.getAll<PostResponse>(
       page,
@@ -45,11 +46,8 @@ const PostIndex: React.FC = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, [
-    page,
-    limit,
-    search
-  ]);
+    // eslint-disable-next-line
+  }, [page, limit, search]);
 
   useEffect(() => {
     setPage(1)

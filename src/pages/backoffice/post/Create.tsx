@@ -64,7 +64,7 @@ const PostCreate: React.FC = () => {
                 onChange={(e) => setPublished(e.target.checked)}
               />
               <label htmlFor="publish-input">
-                {published && "Yes" || "No"}
+                {published ? "Yes" : "No"}
               </label>
             </div>
           </div>

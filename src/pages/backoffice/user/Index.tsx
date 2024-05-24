@@ -1,38 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import BackofficeLayout from '../../../layouts/BackofficeLayout';
-import { Badge, Spinner, Table } from 'flowbite-react';
-import { RiAddLine, RiDeleteBinLine, RiEyeLine, RiPencilLine } from '@remixicon/react';
+import { RiAddLine } from '@remixicon/react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
-
-interface User {
-  id: number;
-  title: string;
-  published: boolean;
-  created_at: string;
-  updated_at: string;
-}
 
 const UserIndex: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState('');
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-
-      setLoading(false);
-    };
-
-    fetchUsers();
-  }, [
-    page,
-    limit,
-    search
-  ]);
 
   return (
     <BackofficeLayout title="User">

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import ApiResponse from './ApiResponse';
-import store from '../redux/store';
 import { authService } from './AuthService';
 
 const API_URL = process.env.REACT_APP_API_URL;

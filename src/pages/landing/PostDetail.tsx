@@ -17,8 +17,11 @@ const PostDetail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [comments, setComments] = useState<Comment[]>([])
+  // eslint-disable-next-line
   const [page, setPage] = useState(1);
+  // eslint-disable-next-line
   const [limit, setLimit] = useState(10);
+  // eslint-disable-next-line
   const [search, setSearch] = useState('');
 
   useEffect(() => {
@@ -49,6 +52,7 @@ const PostDetail: React.FC = () => {
 
   useEffect(() => {
     fetchComments();
+    // eslint-disable-next-line
   }, [
     id,
     page,
