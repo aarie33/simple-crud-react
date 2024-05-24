@@ -5,6 +5,7 @@ import { Spinner } from "flowbite-react";
 import { Post, postService } from "../../../services/PostService";
 
 const PostEdit: React.FC = () => {
+  // eslint-disable-next-line
   const [post, setPost] = useState<Post | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -21,9 +22,9 @@ const PostEdit: React.FC = () => {
       if (response.data) {
         const postData = response.data as Post; // Add type assertion here
         setPost(postData);
-        setTitle(post?.title || '');
-        setContent(post?.content || '');
-        setPublished(post?.published || false);
+        setTitle(postData.title || '');
+        setContent(postData.content || '');
+        setPublished(postData.published || false);
       }
       setLoading(false);
     };
